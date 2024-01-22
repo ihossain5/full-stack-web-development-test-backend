@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(CategoryController::class)
     ->prefix('category')
+    ->group(function () {
+        Route::get('/all', 'index');
+        Route::post('/store', 'store');
+    });
+
+Route::controller(SubCategoryController::class)
+    ->prefix('subcategory')
     ->group(function () {
         Route::get('/all', 'index');
         Route::post('/store', 'store');
