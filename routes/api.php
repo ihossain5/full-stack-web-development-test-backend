@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,12 @@ Route::controller(SubCategoryController::class)
 
 Route::controller(ItemController::class)
     ->prefix('item')
+    ->group(function () {
+        Route::get('/all', 'index');
+        Route::post('/store', 'store');
+    });
+Route::controller(DiscountController::class)
+    ->prefix('discount')
     ->group(function () {
         Route::get('/all', 'index');
         Route::post('/store', 'store');
