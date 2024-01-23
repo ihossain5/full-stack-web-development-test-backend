@@ -39,4 +39,5 @@ class Discount extends Model
                 return null;
         }
     }
+
 }   

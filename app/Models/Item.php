@@ -15,4 +15,8 @@ class Item extends Model
     public function subcategory(){
         return $this->belongsTo(SubCategory::class,'sub_category_id');
     }
+
+    public function discounts(){
+        return $this->hasMany(Discount::class,'discountable_id')->where('discount_type','Item');
+    }
 }
