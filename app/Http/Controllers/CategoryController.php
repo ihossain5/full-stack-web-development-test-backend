@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateCategory;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
 
-class CategoryController extends Controller
-{
-    public function index(){
-        $categpries = Category::query()->select('id','name')->get();
+class CategoryController extends Controller {
+    
+    public function index(CategoryService $categoryService) {
+        $categories = $categoryService->getAll();
 
-        return $this->apiSuccessResponse(CategoryResource::collection($categpries));
+        return $this->apiSuccessResponse(
+            CategoryResource::collection($categories)
+            ->response()
+            ->getData(true)
+        );
     }
 
-    public function store(CategoryRequest $request){
-        $category = Category::create($request->validated());
+    public function store(CategoryRequest $request, CreateCategory $action) {
+        $category = $action->execute($request->validated());
 
         return $this->apiSuccessResponse(new CategoryResource($category));
     }

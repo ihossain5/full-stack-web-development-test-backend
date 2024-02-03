@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateSubCategory;
 use App\Http\Requests\SubCategoryRequest;
 use App\Http\Resources\SubCategoryResource;
-use App\Models\SubCategory;
-use Illuminate\Http\Request;
+use App\Services\SubCategoryService;
 
-class SubCategoryController extends Controller
-{
-    public function index(){
-        $subcategpries = SubCategory::query()->select('id','name','category_id')->with('category:id,name')->get();
+class SubCategoryController extends Controller {
+    
+    public function index(SubCategoryService $subCategoryService) {
+        $subcategpries = $subCategoryService->getAll();
 
-        return $this->apiSuccessResponse(SubCategoryResource::collection($subcategpries));
+        return $this->apiSuccessResponse(
+            SubCategoryResource::collection($subcategpries)
+                ->response()
+                ->getData(true)
+        );
     }
 
-    public function store(SubCategoryRequest $request){
-        $subcategory = SubCategory::create($request->validated());
+    public function store(SubCategoryRequest $request, CreateSubCategory $action) {
+        $subcategory = $action->execute($request->validated());
 
         return $this->apiSuccessResponse(new SubCategoryResource($subcategory));
     }
